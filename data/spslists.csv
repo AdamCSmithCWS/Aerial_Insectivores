@@ -1,0 +1,24 @@
+species,all,Xwestraptor,downturn,nodownturn
+American Kestrel,TRUE,FALSE,FALSE,FALSE
+Baird's Sparrow,TRUE,TRUE,FALSE,TRUE
+Bobolink,TRUE,TRUE,FALSE,TRUE
+Chestnut-collared Longspur,TRUE,TRUE,TRUE,FALSE
+Eastern Meadowlark,TRUE,TRUE,TRUE,FALSE
+Ferruginous Hawk,TRUE,FALSE,FALSE,FALSE
+Grasshopper Sparrow,TRUE,TRUE,FALSE,TRUE
+Horned Lark,TRUE,TRUE,TRUE,FALSE
+Lark Bunting,TRUE,TRUE,FALSE,TRUE
+Loggerhead Shrike,TRUE,FALSE,FALSE,FALSE
+Long-billed Curlew,TRUE,FALSE,FALSE,FALSE
+McCown's Longspur,TRUE,TRUE,FALSE,TRUE
+Northern Harrier,TRUE,FALSE,FALSE,FALSE
+Savannah Sparrow,TRUE,TRUE,TRUE,FALSE
+Sharp-tailed Grouse,TRUE,FALSE,FALSE,FALSE
+Sprague's Pipit,TRUE,TRUE,TRUE,FALSE
+Swainson's Hawk,TRUE,FALSE,FALSE,FALSE
+Upland Sandpiper,TRUE,FALSE,FALSE,FALSE
+Vesper Sparrow,TRUE,TRUE,TRUE,FALSE
+Western Kingbird,TRUE,TRUE,TRUE,FALSE
+Western Meadowlark,TRUE,TRUE,FALSE,TRUE
+Willet,TRUE,FALSE,FALSE,FALSE
+Le Conte's Sparrow,TRUE,TRUE,TRUE,FALSE
