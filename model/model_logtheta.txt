@@ -1,0 +1,14 @@
+model
+{
+  for( s in 1:nspecies) {
+  
+  logthetahat[s] ~ dnorm(logtheta[s],prec.logthetahat[s])
+  logtheta[s] ~ dnorm(mu.logtheta,prec.logtheta)
+  theta[s] <- exp(logtheta[s]) #modelled species index on the original scale
+  }
+  expmu <-exp(mu.logtheta) #exponentiated average of the log-indices - geometric mean
+  mu.logtheta ~ dnorm( 0.0,1.0E-6) #prior for the mean of the logtransformed indices
+  prec.logtheta ~ dgamma(0.001,0.001) #prior for the precision of the logtransformed indices
+  tau <- 1 / pow(prec.logtheta, 0.5) # SE around logtheta
+  
+  }
