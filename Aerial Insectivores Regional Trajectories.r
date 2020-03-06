@@ -66,7 +66,7 @@ source(paste0(basedir,"/transparency function.r"))
 
 
 
-for(gr in grpnms[2]){
+for(gr in grpnms){
 #setwd(basedir)
 
  if(gr == "Raptors"){
@@ -209,7 +209,7 @@ for(wind in regs){
 # Plotting of geofacet plots ----------------------------------------------
 
 
-for(gr in grpnms[2]){
+for(gr in grpnms){
   #setwd(basedir)
   
   if(gr == "Raptors"){
