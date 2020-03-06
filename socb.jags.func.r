@@ -3,7 +3,7 @@
 ####
 socb.jags = function(
 indices = dat,
-reg = "Contiental",
+reg = "Continental",
 group = "Continental",
 ind = "index",
 lci = "lci",
@@ -26,18 +26,59 @@ require(ggplot2)
   
  
   
+  ##### adding in the rows for missing species-Year combinations
+  splist1 <- as.character(unique(indices[,c("species")]))
+  yrs = sort(unique(indices$Year))
+  fulli = expand.grid(species = splist1,Year = yrs,stringsAsFactors = F)
+  
+  indices = merge(fulli,indices,by = c("species","Year"),all = T)
+  
+  
+  for(ss in unique(indices$species)){
+    trs <- which(indices$species == ss & !is.na(indices[,ind]))
+    trsa <- which(indices$species == ss)
+    fys <- min(indices[trs,"Year"])
+    indices[trsa,"firstyear"] <- fys
+    lys = max(indices[trs,"Year"]) #should be the same as the final Year in the data
+    indices[trsa,"lastyear"] <- lys
+    
+    
+    ### this sets all years after the final year with data to the vlue in the final year with data
+    ### below, value for se is set to arbitrarily large value
+    
+    if(lys != max(indices$Year)){
+      trs2 <- which(indices$species == ss & is.na(indices[,ind]) & indices[,"Year"] > lys)
+      indices[trs2,ind] <- indices[which(indices$species == ss & indices[,"Year"] == lys),ind]
+      indices[trs2,lci] <- indices[which(indices$species == ss & indices[,"Year"] == lys),lci]
+      indices[trs2,uci] <- indices[which(indices$species == ss & indices[,"Year"] == lys),uci]
+      indices[trs2,"se"] <- NA
+      
+      
+    }
+   # if(lys != max(indices$year)){ ### 
+    # 
+    # }
+    
+  }
+  
+  ##### END  adding in the rows for missing species-year combinations
+  ##### END  adding in the rows for missing species-year combinations
+  ##### END  adding in the rows for missing species-year combinations
+  ##### END  adding in the rows for missing species-year combinations
+  ##### END  adding in the rows for missing species-year combinations
+  
   
 #  if(group %in% c("introduced","Other.birds")){ add12 = F }
   indices <- indices[order(indices$species,indices$Year),]
   
-   splist <- unique(indices[,c("species","espece")])
+   splist <- unique(indices[,c("species","firstyear","lastyear")])
   # 
   # splist$spfactor <- factor(splist$species,
   #                           levels = splist$species,
   #                           ordered = T)
-  
- # splist$spfact <- as.integer(splist$spfactor) 
-  
+  # 
+  # splist$spfact <- as.integer(splist$spfactor) 
+  # 
   
 
 yrs <- min(indices[,Year]):max(indices[,Year])
@@ -78,7 +119,18 @@ for (sn in 1:nrow(splist)) {
   se = "se"
   r <- which(indices[,"species"] == s)
   
-
+  
+  ######### rows with missing data to be added with arbitrarily imprecise values
+  rmpre = which(indices[,"species"] == s &
+                  is.na(indices[,ind]) &
+                  indices[,"Year"] < splist[sn,"firstyear"])
+  rmpost = which(indices[,"species"] == s &
+                   is.na(indices[,"se"]) &
+                   indices[,"Year"] > splist[sn,"lastyear"])
+  
+  ######### rows with missing data to be added with arbitrarily imprecise values
+  
+  
   
   
   base.s <- indices[which(indices$species == s & indices$Year == base.yr),ind] #stores the base index value 
@@ -107,7 +159,24 @@ for (sn in 1:nrow(splist)) {
       
   }
 
-
+  for(y in rmpre){
+    indices[y,"logthetahat"] <- 0
+    pr.base = indices[which(indices$species == s & indices$Year == byr),"prec.logthetahat"] #arbitrary, but comparable to the lowest precision value in the 2017 dataset
+    yyr = indices[y,"Year"]
+    # indices[rmpre,"prec.logthetahat"] <- 0.1 #arbitrary, but comparable to the lowest precision value in the 2017 dataset
+    indices[y,"prec.logthetahat"] <- pr.base/(byr-yyr)^2
+  }
+  
+  for(y in rmpost){
+    lyrsp = indices[y,"lastyear"]
+    pr.base = indices[which(indices$species == s & indices$Year == lyrsp),"prec.logthetahat"] #arbitrary, but comparable to the lowest precision value in the 2017 dataset
+    yyr = indices[y,"Year"]
+    # indices[rmpre,"prec.logthetahat"] <- 0.1 #arbitrary, but comparable to the lowest precision value in the 2017 dataset
+    indices[y,"prec.logthetahat"] <- pr.base/(yyr-lyrsp)^2
+    
+    #indices[y,"prec.logthetahat"] <- 0.1 #arbitrary, but comparable to the lowest precision value in the 2017 dataset
+  } 
+  
     
   #print(s)
 }
@@ -124,7 +193,7 @@ for(y in base.yr:2018){
   # nspecies <- nrow(splist[which(splist$firstYear <= y &
   #                                 splist$species %in% indices[rs,"species"]),])
   # 
-  # 
+
   nspecies = length(rs)
   
   # logthetahat <- rep(NA,nspecies)

@@ -22,9 +22,12 @@ spslist_Rosenberg = read.csv(paste0("data/Rosenberg et al species list.csv"),
                    stringsAsFactors = F)
 SOCBlist = read.csv("data/final survey and species lists SOCB 2018.csv",stringsAsFactors = F)
 
-allai = spslist_Rosenberg[which(spslist_Rosenberg$AI == "AI"),"species"]
+load("data/combined ai species list.RData")
+allai = spai
 
 allai = allai[-which(allai == "Cave Swallow")]
+
+
 
 
 # Species groups n = 4 ----------------------------------------------------
@@ -63,7 +66,7 @@ source(paste0(basedir,"/transparency function.r"))
 
 
 
-for(gr in grpnms[-4]){
+for(gr in grpnms[2]){
 #setwd(basedir)
 
  if(gr == "Raptors"){
@@ -153,7 +156,7 @@ for(wind in regs){
     
   names(allResultExport)[q] = wind
   
-    spsel = unique(alldataout$English_Name)
+    spsel = unique(alldataout$species)
 
     dat = alldataout[which(alldataout$Region == wind),]
     
@@ -192,7 +195,6 @@ for(wind in regs){
   save(allResultExport,
        file = paste0(dirsave,gr," ",regt," SCB results GAM ",baseline,".RData"))
   
-   
  
 } 
   
@@ -207,7 +209,7 @@ for(wind in regs){
 # Plotting of geofacet plots ----------------------------------------------
 
 
-for(gr in grpnms){
+for(gr in grpnms[2]){
   #setwd(basedir)
   
   if(gr == "Raptors"){
@@ -285,7 +287,7 @@ for(gr in grpnms){
   
   
   
-  load(paste0(dirsave,gr," ",regt," SCB results GAM ",baseline," .RData"))
+  load(paste0(dirsave,gr," ",regt," SCB results GAM ",baseline,".RData"))
   
   
 
